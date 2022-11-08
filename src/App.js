@@ -1,6 +1,6 @@
 import { Component } from './core';
 import './components';
-import { todoList } from './services/todoList/TodoList';
+import { todoList } from './services';
 
 export class App extends Component {
 	constructor() {
