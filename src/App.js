@@ -39,8 +39,8 @@ export class App extends Component {
 	render() {
 		return `
       ${
-			this.state.isLoading &&
-			`
+				this.state.isLoading &&
+				`
          <div class="d-flex justify-content-center align-items-center w-100 h-100" style="position: fixed;
             top: 0;
             left: 0;
@@ -54,13 +54,12 @@ export class App extends Component {
             </div>
          </div>
          `
-		}
+			}
       <div class='container mt-5'>
       <div class="input-group mb-3">
-        <input value='${
-				this.state.value
-			}' type="text" class="form-control" placeholder="Add a new task" aria-label="Recipient's username" aria-describedby="button-addon2">
-        <my-button classname="btn btn-outline-primary" eventtype="save-task"></my-button>
+        <input value='${this.state.value}' 
+		  type="text" class="form-control" placeholder="Add a new task" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <my-button content="Save" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
       </div>
       <ul class="list-group">
         <li class="list-group-item">
