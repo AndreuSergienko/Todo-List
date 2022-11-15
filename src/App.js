@@ -6,55 +6,12 @@ export class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			isLoading: false,
 			value: '',
 		};
 	}
 
-	registerEvents() {
-		this.addEventListener('change', (evt) => {
-			if (evt.target.closest('.form-control')) {
-				this.setState((state) => {
-					return {
-						...state,
-						value: evt.target.value,
-					};
-				});
-			}
-		});
-
-		window.addEventListener('save-task', () => {
-			this.setState((state) => {
-				return {
-					...state,
-					isLoading: true,
-				};
-			});
-			todoList.createTask({ title: this.state.value }).finally(() => {
-				this.setState((state) => ({ ...state, isLoading: false }));
-			});
-		});
-	}
-
 	render() {
 		return `
-      ${
-				this.state.isLoading &&
-				`
-         <div class="d-flex justify-content-center align-items-center w-100 h-100" style="position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #000;
-            opacity: 0.4;
-            z-index: 1;">
-            <div class="spinner-border" role="status">
-               <span class="visually-hidden">Loading...</span>
-            </div>
-         </div>
-         `
-			}
       <div class='container mt-5'>
       <div class="input-group mb-3">
         <input value='${this.state.value}' 
