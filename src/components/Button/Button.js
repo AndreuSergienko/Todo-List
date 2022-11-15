@@ -5,7 +5,7 @@ export class Button extends Component {
 		super();
 	}
 
-	registerEvents() {
+	componentDidMount() {
 		this.addEventListener('click', () => {
 			this.dispatch(this.props.eventtype);
 		});
@@ -16,9 +16,7 @@ export class Button extends Component {
 	}
 
 	render() {
-		const { content, classname } = this.props;
-
-		return `<button type="button" class="${classname}">${content}</button>`;
+		return `<button type="button" class="${this.props.classname}">${this.props.content}</button>`;
 	}
 }
 
