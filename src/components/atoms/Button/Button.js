@@ -6,9 +6,11 @@ export class Button extends Component {
 	}
 
 	componentDidMount() {
-		this.addEventListener('click', () => {
-			this.dispatch(this.props.eventtype);
-		});
+		if (this.props.eventtype) {
+			this.addEventListener('click', () => {
+				this.dispatch(this.props.eventtype);
+			});
+		}
 	}
 
 	static get observedAttributes() {
@@ -16,7 +18,11 @@ export class Button extends Component {
 	}
 
 	render() {
-		return `<button type="button" class="${this.props.classname}">${this.props.content}</button>`;
+		return `
+		<button type="button" class="${this.props.classname}">
+			${this.props.content}
+		</button>
+		`;
 	}
 }
 
