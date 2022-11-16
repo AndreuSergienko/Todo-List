@@ -27,7 +27,7 @@ export class Input extends Component {
 	}
 
 	componentDidMount() {
-		this.addEventListener('input', debounce(this.onInput, 300));
+		this.addEventListener('input', debounce(this.onInput, 1000));
 	}
 
 	static get observedAttributes() {
