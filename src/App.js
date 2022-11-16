@@ -1,5 +1,4 @@
 import { Component } from './core';
-import './components';
 import './components/molecules';
 
 export class App extends Component {
