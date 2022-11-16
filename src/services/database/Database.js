@@ -1,12 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import {
-	addDoc,
-	collection,
-	deleteDoc,
-	doc,
-	getDocs,
 	getFirestore,
+	collection,
+	doc,
+	addDoc,
 	updateDoc,
+	deleteDoc,
+	getDocs
 } from 'firebase/firestore';
 import { API_KEY } from '../../constants/envValues';
 
@@ -31,7 +31,7 @@ export class Database {
 
 		return addDoc(collectionRef, body);
 	}
-   
+
 	read(collectionKey) {
 		const collectionRef = collection(this._database, collectionKey);
 
@@ -46,15 +46,15 @@ export class Database {
 	}
 
 	update(collectionKey, id, body) {
-		const document = doc(this._database, collectionKey, id);
+		const documentRef = doc(this._database, collectionKey, id);
 
-		return updateDoc(document, body);
+		return updateDoc(documentRef, body);
 	}
 
 	delete(collectionKey, id) {
-		const document = doc(this._database, collectionKey, id);
+		const documentRef = doc(this._database, collectionKey, id);
 
-		return deleteDoc(document);
+		return deleteDoc(documentRef);
 	}
 
 	static getInstance() {
