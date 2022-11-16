@@ -1,10 +1,10 @@
 export const debounce = (callback, ms) => {
 	let timer;
-	return (args) => {
+	return (evt) => {
 		clearTimeout(timer);
 
 		timer = setTimeout(() => {
-			callback(args);
+			callback(evt);
 		}, ms);
 	};
 };
