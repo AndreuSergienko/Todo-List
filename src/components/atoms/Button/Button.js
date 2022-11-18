@@ -19,7 +19,7 @@ export class Button extends Component {
 
 	render() {
 		return `
-		<button type="button" class="${this.props.classname}">
+		<button class="${this.props.classname}">
 			${this.props.content}
 		</button>
 		`;

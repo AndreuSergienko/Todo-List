@@ -7,28 +7,74 @@ export class InputGroup extends Component {
 		super();
 		this.state = {
 			inputValue: '',
-			isSending: false
+			isSending: false,
 		};
 	}
 
-	onSave() {
-		this.setState((state) => {
-			return {
-				...state,
-				isSending: true
-			}
-		})
-		todoList
-			.createTask({ title: this.state.inputValue, isCompleted: false })
-			.then(() => {
-				this.setState((state) => {
-					return {
-						...state,
-						inputValue: '',
-						isSending: false
-					};
-				});
-			});
+	// onSave() {
+	// 	this.setState((state) => {
+	// 		return {
+	// 			...state,
+	// 			isSending: true,
+	// 		};
+	// 	});
+	// 	todoList
+	// 		.createTask({ title: this.state.inputValue, isCompleted: false })
+	// 		.then(() => {
+	// 			this.setState((state) => {
+	// 				return {
+	// 					...state,
+	// 					inputValue: '',
+	// 				};
+	// 			});
+	// 		})
+	// 		.catch((err) => {
+	// 			console.error(err.message);
+	// 		})
+	// 		.finally(() => {
+	// 			this.setState((state) => {
+	// 				return {
+	// 					...state,
+	// 					isSending: false,
+	// 				};
+	// 			});
+	// 		});
+	// }
+
+	onSubmit(evt) {
+		evt.preventDefault();
+		const data = new FormData(evt.target);
+		const task = {};
+		for (const value of data.entries()) {
+			console.log(value);
+		}
+		// this.setState((state) => {
+		// 	return {
+		// 		...state,
+		// 		isSending: true,
+		// 	};
+		// });
+		// todoList
+		// 	.createTask()
+		// 	.then(() => {
+		// 		this.setState((state) => {
+		// 			return {
+		// 				...state,
+		// 				inputValue: '',
+		// 			};
+		// 		});
+		// 	})
+		// 	.catch((err) => {
+		// 		console.error(err.message);
+		// 	})
+		// 	.finally(() => {
+		// 		this.setState((state) => {
+		// 			return {
+		// 				...state,
+		// 				isSending: false,
+		// 			};
+		// 		});
+		// 	});
 	}
 
 	onInput(evt) {
@@ -41,14 +87,15 @@ export class InputGroup extends Component {
 	}
 
 	componentDidMount() {
-		this.addEventListener('save-task', this.onSave);
-		this.addEventListener('custom-input', this.onInput);
+		// this.addEventListener('save-task', this.onSave);
+		this.addEventListener('submit', this.onSubmit);
 	}
 
 	render() {
 		return `
-		${this.state.isSending ?
-				`
+		${
+			this.state.isSending
+				? `
 			<div
 		 	style="
 			position:fixed;
@@ -67,13 +114,16 @@ export class InputGroup extends Component {
 				</div>
 		</div>
 			`
-				:
-				''
-			}
-      <div class="input-group mb-3">
-         <my-input value="${this.state.inputValue}" type="text" placeholder="Add a new task"></my-input>
-         <my-button content="Save" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
-      </div>
+				: ''
+		}
+      <form id='form'>
+			<div class="input-group mb-3">
+				<my-input type="text" name="task" placeholder="Add a new task">
+				</my-input>
+				<my-button content="Save" type="submit" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
+
+			</div>
+		</form>
       `;
 	}
 }
