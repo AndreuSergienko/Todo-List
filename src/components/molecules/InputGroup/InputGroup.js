@@ -6,95 +6,51 @@ export class InputGroup extends Component {
 	constructor() {
 		super();
 		this.state = {
-			inputValue: '',
 			isSending: false,
 		};
 	}
 
-	// onSave() {
-	// 	this.setState((state) => {
-	// 		return {
-	// 			...state,
-	// 			isSending: true,
-	// 		};
-	// 	});
-	// 	todoList
-	// 		.createTask({ title: this.state.inputValue, isCompleted: false })
-	// 		.then(() => {
-	// 			this.setState((state) => {
-	// 				return {
-	// 					...state,
-	// 					inputValue: '',
-	// 				};
-	// 			});
-	// 		})
-	// 		.catch((err) => {
-	// 			console.error(err.message);
-	// 		})
-	// 		.finally(() => {
-	// 			this.setState((state) => {
-	// 				return {
-	// 					...state,
-	// 					isSending: false,
-	// 				};
-	// 			});
-	// 		});
-	// }
-
 	onSubmit(evt) {
 		evt.preventDefault();
-		const data = new FormData(evt.target);
-		const task = {};
-		for (const value of data.entries()) {
-			console.log(value);
-		}
-		// this.setState((state) => {
-		// 	return {
-		// 		...state,
-		// 		isSending: true,
-		// 	};
-		// });
-		// todoList
-		// 	.createTask()
-		// 	.then(() => {
-		// 		this.setState((state) => {
-		// 			return {
-		// 				...state,
-		// 				inputValue: '',
-		// 			};
-		// 		});
-		// 	})
-		// 	.catch((err) => {
-		// 		console.error(err.message);
-		// 	})
-		// 	.finally(() => {
-		// 		this.setState((state) => {
-		// 			return {
-		// 				...state,
-		// 				isSending: false,
-		// 			};
-		// 		});
-		// 	});
-	}
 
-	onInput(evt) {
+		const newTask = {
+			isCompleted: false,
+		}
+
+		const formData = new FormData(evt.target);
+		for (const [key, value] of formData.entries()) {
+			newTask[key] = value
+		}
+
 		this.setState((state) => {
 			return {
 				...state,
-				inputValue: evt.detail.value,
+				isSending: true,
 			};
 		});
+
+		todoList
+			.createTask(newTask)
+			.then(() => {
+				this.setState((state) => {
+					return {
+						...state,
+						isSending: false,
+					};
+				});
+			})
+			.catch((err) => {
+				console.error(err.message);
+			})
 	}
 
 	componentDidMount() {
-		// this.addEventListener('save-task', this.onSave);
 		this.addEventListener('submit', this.onSubmit);
 	}
 
 	render() {
 		return `
-		${
-			this.state.isSending
+		${this.state.isSending
 				? `
 			<div
 		 	style="
@@ -115,13 +71,12 @@ export class InputGroup extends Component {
 		</div>
 			`
 				: ''
-		}
+			}
       <form id='form'>
 			<div class="input-group mb-3">
-				<my-input type="text" name="task" placeholder="Add a new task">
+				<my-input type="text" iscompleted="false" name="title" placeholder="Add a new task">
 				</my-input>
 				<my-button content="Save" type="submit" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
-
 			</div>
 		</form>
       `;

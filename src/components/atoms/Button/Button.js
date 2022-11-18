@@ -5,14 +5,6 @@ export class Button extends Component {
 		super();
 	}
 
-	componentDidMount() {
-		if (this.props.eventtype) {
-			this.addEventListener('click', () => {
-				this.dispatch(this.props.eventtype);
-			});
-		}
-	}
-
 	static get observedAttributes() {
 		return ['content', 'classname', 'eventtype'];
 	}
