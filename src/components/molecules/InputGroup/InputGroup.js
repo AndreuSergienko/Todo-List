@@ -74,7 +74,7 @@ export class InputGroup extends Component {
 			}
       <form id='form'>
 			<div class="input-group mb-3">
-				<my-input type="text" iscompleted="false" name="title" placeholder="Add a new task">
+				<my-input type="text" name="title" placeholder="Add a new task">
 				</my-input>
 				<my-button content="Save" type="submit" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
 			</div>
