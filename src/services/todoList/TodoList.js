@@ -1,4 +1,4 @@
-import { Database } from '../../services';
+import { Database } from '../Database';
 
 class TodoList {
 	constructor() {
