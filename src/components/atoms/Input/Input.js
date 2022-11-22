@@ -1,4 +1,5 @@
 import { Component } from '../../../core';
+import './Input.scss';
 
 export class Input extends Component {
 	constructor() {
@@ -6,15 +7,22 @@ export class Input extends Component {
 	}
 
 	static get observedAttributes() {
-		return ['type', 'placeholder', 'name'];
+		return [
+			'type',
+			'placeholder',
+			'name',
+			'customclass',
+			'showcancel',
+			'showsave',
+		];
 	}
 
 	render() {
 		return `
       <input
-				 name="${this.props.name}"
+			name="${this.props.name}"
          type="${this.props.type}"
-         class="form-control my-input"
+         class="form-control ${this.props.customclass}"
          placeholder="${this.props.placeholder}"
        />
       `;

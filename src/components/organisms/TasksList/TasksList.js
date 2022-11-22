@@ -1,42 +1,34 @@
-import { Component } from "../../../core";
-import '../../molecules'
+import { Component } from '../../../core';
+import '../../molecules';
 
 export class TasksList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      items: [
-        {
-          taskName: 'Clean your fuckin teeth',
-          isCompleted: true,
-        },
-        {
-          taskName: 'Charge phone',
-          isCompleted: false,
-        },
-        {
-          taskName: 'Make breakfast',
-          isCompleted: false,
-        },
-      ]
-    };
-  }
+	constructor() {
+		super();
+	}
 
-  render() {
-    return `
+	static get observedAttributes() {
+		return ['tasks'];
+	}
+
+	render() {
+		return `
         <ul class="list-group">
-          ${this.state.items
-        .map((taskItem) => (
-          `
-            <my-task-item iscompleted="${taskItem.isCompleted}" taskname="${taskItem.taskName}">
-            </my-task-item>   
-          `
-        ))
-        .join('')
-      }
+          ${JSON.parse(this.props.tasks)
+					.map(
+						(taskItem) =>
+							`
+						<my-task-item 
+							id="${taskItem.id}"
+							iscompleted="${taskItem.isCompleted}"
+							taskname="${taskItem.title}"
+						>
+						</my-task-item>   
+          			`
+					)
+					.join('')}
         </ul>
       `;
-  }
+	}
 }
 
 customElements.define('my-tasks-list', TasksList);
