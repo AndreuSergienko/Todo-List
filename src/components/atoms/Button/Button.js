@@ -10,11 +10,21 @@ export class Button extends Component {
 	}
 
 	onDelete() {
-		this.dispatch(this.props.eventtype, { taskId: this.props.taskid });
+		if (this.props.eventtype) {
+			this.dispatch(this.props.eventtype, { taskId: this.props.taskid });
+		}
 	}
 
 	onEdit() {
-		this.dispatch(this.props.eventtype, { taskId: this.props.taskid });
+		if (this.props.eventtype) {
+			this.dispatch(this.props.eventtype, { taskId: this.props.taskid });
+		}
+	}
+
+	onCancel() {
+		if (this.props.eventtype) {
+			this.dispatch(this.props.eventtype);
+		}
 	}
 
 	onClick(evt) {
@@ -23,6 +33,9 @@ export class Button extends Component {
 		}
 		if (evt.target.closest('.edit')) {
 			this.onEdit();
+		}
+		if (evt.target.closest('.cancel')) {
+			this.onCancel()
 		}
 	}
 

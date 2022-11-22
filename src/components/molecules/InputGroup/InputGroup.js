@@ -7,13 +7,14 @@ export class InputGroup extends Component {
 	}
 
 	static get observedAttributes() {
-		return ['eventtype'];
+		return ['placeholder', 'customclass', 'eventtype', 'showcancel', 'dataid'];
 	}
 
 	onSubmit(evt) {
 		evt.preventDefault();
-		if (this.props.eventype) {
-			this.dispatch(this.props.eventype);
+		if (this.props.eventtype) {
+			evt.stopPropagation()
+			this.dispatch(this.props.eventtype, { taskId: this.props.dataid });
 		}
 	}
 
@@ -27,11 +28,29 @@ export class InputGroup extends Component {
 
 	render() {
 		return `
-      <form id='form'>
+      <form ${this.props.dataid ? `data-id="${this.props.dataid}"` : ''}>
 			<div class="input-group">
-				<my-input customclass="custom-form-input" type="text" name="title" placeholder="Change your task...">
+				<my-input customclass="${this.props.customclass || ''}" type="text" name="title" placeholder="${this.props.placeholder}">
 				</my-input>
+				${this.props.showcancel ? `
+					<my-button
+					 	content="Cancel" 
+						type="button"
+						classname="btn btn-secondary cancel"
+						eventtype="cancel-edit" 
+					>
+					</my-button>
+					<my-button 
+						content="Save changes"
+						type="submit"
+						classname="btn btn-outline-primary"
+					</my-button>
+				`
+				:
+				`
 				<my-button content="Save" type="submit" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
+				`
+			}
 			</div>
 		</form>
       `;

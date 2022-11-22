@@ -12,8 +12,6 @@ export class Input extends Component {
 			'placeholder',
 			'name',
 			'customclass',
-			'showcancel',
-			'showsave',
 		];
 	}
 

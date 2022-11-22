@@ -3,47 +3,61 @@ import '../../atoms';
 import '../../molecules';
 
 export class TaskItem extends Component {
-	constructor() {
-		super();
-		this.state = {
-			isEditting: false,
-		};
-	}
+  constructor() {
+    super();
+    this.state = {
+      isEditting: false,
+    };
+  }
 
-	static get observedAttributes() {
-		return ['iscompleted', 'taskname', 'id'];
-	}
+  static get observedAttributes() {
+    return ['iscompleted', 'taskname', 'id'];
+  }
 
-	onClick(evt) {
-		if (evt.target.closest('.edit')) {
-			this.setState((state) => {
-				return {
-					...state,
-					isEditting: true,
-				};
-			});
-			this.dispatch('edit-task', { taskId: this.props.id });
-		}
-	}
+  onClick(evt) {
+    if (evt.target.closest('.edit')) {
+      this.setState((state) => {
+        return {
+          ...state,
+          isEditting: true,
+        };
+      });
+    }
+  }
 
-	componentDidMount() {
-		this.addEventListener('click', this.onClick);
-	}
+  onCancelEdit() {
+    this.setState((state) => {
+      return {
+        ...state,
+        isEditting: false,
+      };
+    });
+  }
 
-	componentWillUnmount() {
-		this.removeEventListener('click', this.onClick);
-	}
+  componentDidMount() {
+    this.addEventListener('click', this.onClick);
+    this.addEventListener('cancel-edit', this.onCancelEdit);
+  }
 
-	render() {
-		return `
+  componentWillUnmount() {
+    this.removeEventListener('click', this.onClick);
+  }
+
+  render() {
+    return `
       <li class="list-group-item mt-3">
         <div class="form-check d-flex justify-content-between align-items-center">
-            ${
-					this.state.isEditting
-						? `
-              <my-input-group></my-input-group>
+            ${this.state.isEditting
+        ? `
+              <my-input-group 
+                placeholder="Change task..."
+                eventtype="edit-task"
+                showcancel="${this.state.isEditting}"
+                dataid="${this.props.id}"  
+              >
+              </my-input-group>
               `
-						: `
+        : `
               <div>                 
                 <my-checkbox-group
                   iscompleted="${this.props.iscompleted}"
@@ -61,7 +75,6 @@ export class TaskItem extends Component {
                 >
                 </my-button>
                 <my-button
-                  eventtype="edit-task" 
                   taskid="${this.props.id}"  
                   type="button"
                   classname="btn edit btn-primary btn-sm"
@@ -70,11 +83,11 @@ export class TaskItem extends Component {
                 </my-button>
               </div>
               `
-				}
+      }
         </div>
       </li>
       `;
-	}
+  }
 }
 
 customElements.define('my-task-item', TaskItem);

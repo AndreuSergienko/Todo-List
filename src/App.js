@@ -20,6 +20,10 @@ export class App extends Component {
 			.then((data) => {
 				this.setState((state) => {
 					return {
+						...state,
+						isSending: false,
+						isEditting: false,
+						isRemoving: false,
 						tasks: data,
 					};
 				});
@@ -30,9 +34,7 @@ export class App extends Component {
 	}
 
 	onSubmit(evt) {
-		const newTask = {
-			isCompleted: false,
-		};
+		const newTask = {};
 
 		const formData = new FormData(evt.target);
 		for (const [key, value] of formData.entries()) {
@@ -47,14 +49,8 @@ export class App extends Component {
 		});
 
 		todoList
-			.createTask(newTask)
+			.createTask({ ...newTask, isCompleted: false })
 			.then(() => {
-				this.setState((state) => {
-					return {
-						...state,
-						isSending: false,
-					};
-				});
 				this.getFirestoreTasks();
 			})
 			.catch((err) => {
@@ -62,7 +58,28 @@ export class App extends Component {
 			});
 	}
 
-	onTaskEdit(evt) {}
+	onTaskEdit(evt) {
+		const currTaskForm = this.querySelector(`form[data-id='${evt.detail.taskId}']`)
+		const editFormData = new FormData(currTaskForm)
+		const editedTask = {}
+		for (const [key, value] of editFormData.entries()) {
+			editedTask[key] = value
+		}
+
+
+		this.setState((state) => {
+			return {
+				...state,
+				isEditting: true,
+			};
+		});
+
+		todoList
+			.updateTask(evt.detail.taskId, { ...editedTask, isCompleted: false })
+			.then(() => {
+				this.getFirestoreTasks()
+			})
+	}
 
 	onTaskDelete(evt) {
 		this.setState((state) => {
@@ -75,12 +92,6 @@ export class App extends Component {
 		todoList
 			.deleteTask(evt.detail.taskId)
 			.then(() => {
-				this.setState((state) => {
-					return {
-						...state,
-						isRemoving: false,
-					};
-				});
 				this.getFirestoreTasks();
 			})
 			.catch((err) => {
@@ -97,8 +108,7 @@ export class App extends Component {
 
 	render() {
 		return `
-		${
-			this.state.isSending || this.state.isRemoving
+		${this.state.isSending || this.state.isRemoving || this.state.isEditting
 				? `
 			<div
 		 	style="
@@ -119,9 +129,9 @@ export class App extends Component {
 		</div>
 			`
 				: ''
-		}
+			}
       <div class='container mt-5'>
-        <my-input-group></my-input-group>
+        <my-input-group placeholder="Add a new task..."></my-input-group>
       </div>
 		<div class='container mt-5'>
       	<my-tasks-list
