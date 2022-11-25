@@ -7,14 +7,25 @@ export class InputGroup extends Component {
 	}
 
 	static get observedAttributes() {
-		return ['placeholder', 'customclass', 'eventtype', 'showcancel', 'dataid'];
+		return [
+			'placeholder',
+			'customclass',
+			'eventtype',
+			'showcancel',
+			'dataid',
+			'value',
+			'iscompleted',
+		];
 	}
 
 	onSubmit(evt) {
 		evt.preventDefault();
 		if (this.props.eventtype) {
-			evt.stopPropagation()
-			this.dispatch(this.props.eventtype, { taskId: this.props.dataid });
+			evt.stopPropagation();
+			this.dispatch(this.props.eventtype, {
+				taskId: this.props.dataid,
+				isCompleted: this.props.iscompleted,
+			});
 		}
 	}
 
@@ -30,9 +41,17 @@ export class InputGroup extends Component {
 		return `
       <form ${this.props.dataid ? `data-id="${this.props.dataid}"` : ''}>
 			<div class="input-group">
-				<my-input customclass="${this.props.customclass || ''}" type="text" name="title" placeholder="${this.props.placeholder}">
+				<my-input
+				 customclass="${this.props.customclass || ''}"
+				 type="text" 
+				 ${this.props.value ? `value="${this.props.value}"` : ''}
+				 name="title"
+				 placeholder="${this.props.placeholder}"
+				>
 				</my-input>
-				${this.props.showcancel ? `
+				${
+					this.props.showcancel
+						? `
 					<my-button
 					 	content="Cancel" 
 						type="button"
@@ -46,11 +65,10 @@ export class InputGroup extends Component {
 						classname="btn btn-outline-primary"
 					</my-button>
 				`
-				:
-				`
+						: `
 				<my-button content="Save" type="submit" classname="btn btn-outline-primary" eventtype="save-task"></my-button>
 				`
-			}
+				}
 			</div>
 		</form>
       `;

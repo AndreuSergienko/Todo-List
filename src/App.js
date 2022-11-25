@@ -58,14 +58,15 @@ export class App extends Component {
 			});
 	}
 
-	onTaskEdit(evt) {
-		const currTaskForm = this.querySelector(`form[data-id='${evt.detail.taskId}']`)
-		const editFormData = new FormData(currTaskForm)
-		const editedTask = {}
+	onTaskEdit({ detail }) {
+		const currTaskForm = this.querySelector(
+			`form[data-id='${detail.taskId}']`
+		);
+		const editFormData = new FormData(currTaskForm);
+		const editedTask = {};
 		for (const [key, value] of editFormData.entries()) {
-			editedTask[key] = value
+			editedTask[key] = value;
 		}
-
 
 		this.setState((state) => {
 			return {
@@ -75,10 +76,13 @@ export class App extends Component {
 		});
 
 		todoList
-			.updateTask(evt.detail.taskId, { ...editedTask, isCompleted: false })
-			.then(() => {
-				this.getFirestoreTasks()
+			.updateTask(detail.taskId, {
+				...editedTask,
+				isCompleted: detail.isCompleted,
 			})
+			.then(() => {
+				this.getFirestoreTasks();
+			});
 	}
 
 	onTaskDelete(evt) {
@@ -99,16 +103,36 @@ export class App extends Component {
 			});
 	}
 
+	onChecked({ detail }) {
+		todoList
+			.updateTask(detail.taskId, {
+				title: detail.taskTitle,
+				isCompleted: detail.isChecked,
+			})
+			.then(() => {
+				this.getFirestoreTasks();
+			});
+	}
+
 	componentDidMount() {
 		this.getFirestoreTasks();
 		this.addEventListener('submit', this.onSubmit);
 		this.addEventListener('delete-task', this.onTaskDelete);
 		this.addEventListener('edit-task', this.onTaskEdit);
+		this.addEventListener('checked', this.onChecked);
+	}
+
+	componentWillUnmount() {
+		this.removeEventListener('submit', this.onSubmit);
+		this.removeEventListener('delete-task', this.onTaskDelete);
+		this.removeEventListener('edit-task', this.onTaskEdit);
+		this.removeEventListener('checked', this.onChecked);
 	}
 
 	render() {
 		return `
-		${this.state.isSending || this.state.isRemoving || this.state.isEditting
+		${
+			this.state.isSending || this.state.isRemoving || this.state.isEditting
 				? `
 			<div
 		 	style="
@@ -129,7 +153,7 @@ export class App extends Component {
 		</div>
 			`
 				: ''
-			}
+		}
       <div class='container mt-5'>
         <my-input-group placeholder="Add a new task..."></my-input-group>
       </div>

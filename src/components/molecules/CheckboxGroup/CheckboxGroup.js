@@ -1,29 +1,50 @@
-import { Component } from "../../../core";
+import { Component } from '../../../core';
+import './CheckboxGroup.scss';
 
 export class CheckboxGroup extends Component {
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  static get observedAttributes() {
-    return ['iscompleted', 'taskname']
-  }
+	static get observedAttributes() {
+		return ['iscompleted', 'taskname', 'taskid'];
+	}
 
-  render() {
+	onClick(evt) {
+		if (evt.target.closest('.form-check-input')) {
+			const checkbox = evt.target.closest('.form-check-input');
+			this.dispatch('checked', {
+				isChecked: checkbox.checked,
+				taskId: this.props.taskid,
+				taskTitle: this.props.taskname,
+			});
+		}
+	}
 
+	componentDidMount() {
+		this.addEventListener('click', this.onClick);
+	}
 
-    return `
+	componentWillUnmount() {
+		this.removeEventListener('click', this.onClick);
+	}
+
+	render() {
+		return `
         <label class="form-check-label">
-          <input
+         <input
             class="form-check-input"
             ${JSON.parse(this.props.iscompleted) ? 'checked' : ''} 
             type="checkbox"
-            value=""
-          >
-          <span>${this.props.taskname}</span>
+         >
+         <span
+			  class="${JSON.parse(this.props.iscompleted) ? 'completed' : ''}"
+			>
+				${this.props.taskname}
+			</span>
         </label>
       `;
-  }
+	}
 }
 
 customElements.define('my-checkbox-group', CheckboxGroup);

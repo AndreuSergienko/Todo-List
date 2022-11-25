@@ -3,65 +3,72 @@ import '../../atoms';
 import '../../molecules';
 
 export class TaskItem extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isEditting: false,
-    };
-  }
+	constructor() {
+		super();
+		this.state = {
+			isEditting: false,
+			isTaskChecked: false,
+		};
+	}
 
-  static get observedAttributes() {
-    return ['iscompleted', 'taskname', 'id'];
-  }
+	static get observedAttributes() {
+		return ['iscompleted', 'taskname', 'id'];
+	}
 
-  onClick(evt) {
-    if (evt.target.closest('.edit')) {
-      this.setState((state) => {
-        return {
-          ...state,
-          isEditting: true,
-        };
-      });
-    }
-  }
+	onClick(evt) {
+		if (evt.target.closest('.edit')) {
+			this.setState((state) => {
+				return {
+					...state,
+					isEditting: true,
+				};
+			});
+		}
+	}
 
-  onCancelEdit() {
-    this.setState((state) => {
-      return {
-        ...state,
-        isEditting: false,
-      };
-    });
-  }
+	onCancelEdit() {
+		this.setState((state) => {
+			return {
+				...state,
+				isEditting: false,
+			};
+		});
+	}
 
-  componentDidMount() {
-    this.addEventListener('click', this.onClick);
-    this.addEventListener('cancel-edit', this.onCancelEdit);
-  }
+	componentDidMount() {
+		this.addEventListener('click', this.onClick);
+		this.addEventListener('cancel-edit', this.onCancelEdit);
+	}
 
-  componentWillUnmount() {
-    this.removeEventListener('click', this.onClick);
-  }
+	componentWillUnmount() {
+		this.removeEventListener('click', this.onClick);
+		this.removeEventListener('cancel-edit', this.onCancelEdit);
+	}
 
-  render() {
-    return `
+	render() {
+		return `
       <li class="list-group-item mt-3">
         <div class="form-check d-flex justify-content-between align-items-center">
-            ${this.state.isEditting
-        ? `
+            ${
+					this.state.isEditting
+						? `
               <my-input-group 
                 placeholder="Change task..."
                 eventtype="edit-task"
                 showcancel="${this.state.isEditting}"
-                dataid="${this.props.id}"  
+                dataid="${this.props.id}"
+					 iscompleted="${this.props.iscompleted}"  
+                value="${this.props.taskname}"
               >
               </my-input-group>
               `
-        : `
+						: `
               <div>                 
                 <my-checkbox-group
+					 	taskid="${this.props.id}"
                   iscompleted="${this.props.iscompleted}"
                   taskname="${this.props.taskname}"
+                  iseditting="${this.state.isEditting}"
                 >
                 </my-checkbox-group>
               </div>
@@ -83,11 +90,11 @@ export class TaskItem extends Component {
                 </my-button>
               </div>
               `
-      }
+				}
         </div>
       </li>
       `;
-  }
+	}
 }
 
 customElements.define('my-task-item', TaskItem);

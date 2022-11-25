@@ -7,12 +7,7 @@ export class Input extends Component {
 	}
 
 	static get observedAttributes() {
-		return [
-			'type',
-			'placeholder',
-			'name',
-			'customclass',
-		];
+		return ['type', 'placeholder', 'name', 'customclass', 'value'];
 	}
 
 	render() {
@@ -22,6 +17,7 @@ export class Input extends Component {
          type="${this.props.type}"
          class="form-control ${this.props.customclass}"
          placeholder="${this.props.placeholder}"
+			value="${this.props.value ?? ''}"
        />
       `;
 	}
